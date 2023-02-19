@@ -3,17 +3,22 @@ import Facebook from "../img/facebook.png";
 import Github from "../img/github.png";
 
 const Login = () => {
+
+  // google
   const google = () => {
-    // window.open("http://localhost:5000/auth/google", "_self");
+    window.open("http://localhost:4000/auth/google", "_self");
   };
 
+  // github
   const github = () => {
-    // window.open("http://localhost:5000/auth/github", "_self");
+    window.open("http://localhost:4000/auth/github", "_self");
   };
 
+  // facebook
   const facebook = () => {
-    // window.open("http://localhost:5000/auth/facebook", "_self");
+    window.open("http://localhost:4000/auth/facebook", "_self");
   };
+  
 
   return (
     <div className="login">
@@ -38,8 +43,8 @@ const Login = () => {
           <div className="or">OR</div>
         </div>
         <div className="right">
-          <input type="text" placeholder="Username" />
-          <input type="text" placeholder="Password" />
+          <input type="text" name="username" placeholder="Username" />
+          <input type="text" name="password" placeholder="Password" />
           <button className="submit">Login</button>
         </div>
       </div>
