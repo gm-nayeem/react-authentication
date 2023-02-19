@@ -2,12 +2,13 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const morgan = require('morgan');
+const passportSetup = require("./passport");
 const passport = require("passport");
 const cookieSession = require("cookie-session");
 
 // internal import
 const authRoute = require("./routes/auth");
-const passportSetup = require("./passport");
 
 const app = express();
 
@@ -21,6 +22,9 @@ app.use(
 // pasport
 app.use(passport.initialize());
 app.use(passport.session());
+
+// morgan
+app.use(morgan('dev'));
 
 // cors
 app.use(

@@ -16,7 +16,7 @@ const Login = () => {
 
   // facebook
   const facebook = () => {
-    window.open("http://localhost:4000/auth/facebook", "_self");
+    // window.open("http://localhost:4000/auth/facebook", "_self");
   };
   
 
