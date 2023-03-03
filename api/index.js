@@ -3,30 +3,17 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const morgan = require('morgan');
-const passportSetup = require("./passport");
+require("./passport");
+const session = require("express-session");
 const passport = require("passport");
-const cookieSession = require("cookie-session");
 
 // internal import
 const authRoute = require("./routes/auth");
 
 const app = express();
 
-// cookie-session
-app.use(
-    cookieSession({ 
-        name: "session", keys: ["mern"], maxAge: 24 * 60 * 60 * 100 
-    })
-);
-
-// pasport
-app.use(passport.initialize());
-app.use(passport.session());
-
 // morgan
 app.use(morgan('dev'));
-
-// cors
 app.use(
     cors({
         origin: "http://localhost:3000",
@@ -34,9 +21,34 @@ app.use(
         credentials: true,
     })
 );
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+
+// session
+app.set("trust proxy", 1);
+app.use(
+    session({
+        secret: "passport google auth",
+        resave: false,
+        saveUninitialized: true,
+        // cookie: { secure: true },
+    })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 // routes
 app.use("/auth", authRoute);
+
+
+// error handling
+app.use((err, req, res, next) => {
+    console.error(err.stack)
+    res.status(500).send('Something broke!')
+})
 
 
 // server listen port

@@ -1,7 +1,8 @@
+require("dotenv").config();
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const GithubStrategy = require("passport-github2").Strategy;
-const FacebookStrategy = require("passport-facebook").Strategy;
+// const FacebookStrategy = require("passport-facebook").Strategy;
 
 
 // google
@@ -10,10 +11,14 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "/auth/google/callback",
+      callbackURL: "http://localhost:5000/auth/google/callback",
     },
-    function (accessToken, refreshToken, profile, done) {
-      done(null, profile);
+    function (accessToken, refreshToken, profile, cb) {
+      // const myUser = {
+      //   googleId: profile.id,
+      //   username: profile.displayName,
+      // }
+      return cb(null, profile);
     }
   )
 );
