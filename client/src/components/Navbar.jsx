@@ -16,18 +16,18 @@ const Navbar = ({ user }) => {
                 <ul className="list">
                     <li className="listItem">
                         <img
-                            src={user.photos[0].value}
-                            alt="Image"
+                            src={user.profilePic}
+                            alt=""
                             className="avatar"
                         />
                     </li>
-                    <li className="listItem">{user.displayName}</li>
+                    <li className="listItem">{user.user_name}</li>
                     <li className="listItem" onClick={logout}>
                         Logout
                     </li>
                 </ul>
             ) : (
-                <Link className="link" to="login">
+                <Link className="link listItem" to="login">
                     Login
                 </Link>
             )}

@@ -1,13 +1,16 @@
-// external import
+// module import
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const morgan = require('morgan');
-require("./passport");
-const session = require("express-session");
-const passport = require("passport");
+require("./config/passport");
+require("./config/database")
 
-// internal import
+const passport = require("passport");
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
+
+// route import
 const authRoute = require("./routes/auth");
 
 const app = express();
@@ -29,10 +32,13 @@ app.use(express.json());
 app.set("trust proxy", 1);
 app.use(
     session({
-        secret: "passport google auth",
+        secret: process.env.SECRET_KEY,
         resave: false,
         saveUninitialized: true,
-        // cookie: { secure: true },
+        store: MongoStore.create({
+            mongoUrl: process.env.MONGO_URL,
+            collectionName: "sessions",
+        }),
     })
 );
 
@@ -47,7 +53,7 @@ app.use("/auth", authRoute);
 // error handling
 app.use((err, req, res, next) => {
     console.error(err.stack)
-    res.status(500).send('Something broke!')
+    res.status(500).send(err.stack)
 })
 
 

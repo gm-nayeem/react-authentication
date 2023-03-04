@@ -14,10 +14,6 @@ passport.use(
       callbackURL: "http://localhost:5000/auth/google/callback",
     },
     function (accessToken, refreshToken, profile, cb) {
-      // const myUser = {
-      //   googleId: profile.id,
-      //   username: profile.displayName,
-      // }
       return cb(null, profile);
     }
   )
