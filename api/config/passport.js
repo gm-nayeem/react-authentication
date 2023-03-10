@@ -16,23 +16,41 @@ passport.use(
             callbackURL: "http://localhost:5000/auth/google/callback",
         },
         async (accessToken, refreshToken, profile, cb) => {
-            try {
-                const user = await User.findOne({ userId: profile.id });
-                if (!user) {
-                    let newUser = new User({
-                        userId: profile.id,
-                        user_name: profile.displayName,
-                        email: "gm.nayeem533@gmail.com",
-                        profilePic: profile.photos[0].value,
-                    });
 
+            const {
+                id, displayName, emails, photos
+            } = profile;
+
+            // console.log({
+            //     userId: id, 
+            //     name: displayName, 
+            //     email: emails[0].value, 
+            //     pic: photos[0].value
+            // });
+
+            try {
+                const user = await User.findOne({ 
+                    email: emails[0].value 
+                });
+
+                if (!user) {
+
+                    // console.log("not user available!!, I am creating user")
+
+                    const newUser = new User({
+                        userId: id,
+                        userName: displayName,
+                        email: emails[0].value,
+                        profilePic: photos[0].value,
+                    });
+    
                     await newUser.save();
                     return cb(null, newUser);
                 } else {
                     return cb(null, user);
                 }
-
-            } catch (err) {
+                
+            } catch(err) {
                 return cb(err, null);
             }
         }
@@ -47,26 +65,24 @@ passport.use(
             clientSecret: process.env.GITHUB_CLIENT_SECRET,
             callbackURL: "/auth/github/callback",
         },
-        async (accessToken, refreshToken, profile, cb) => {
+        async (accessToken, refreshToken, profile, done) => {
             try {
-                console.log(profile)
                 const user = await User.findOne({ userId: profile.id });
                 if (!user) {
                     let newUser = new User({
                         userId: profile.id,
-                        user_name: profile.displayName,
-                        email: "gmnayeem25@gmail.com",
+                        userName: profile.displayName,
                         profilePic: profile.photos[0].value,
                     });
 
                     await newUser.save();
-                    return cb(null, newUser);
+                    return done(null, newUser);
                 } else {
-                    return cb(null, user);
+                    return done(null, user);
                 }
 
             } catch (err) {
-                return cb(err, null);
+                return done(err, null);
             }
         }
     )
@@ -74,7 +90,7 @@ passport.use(
 
 
 // create session id
-// whenever we login it creares user id inside session
+// whenever we login it creates user id inside session
 passport.serializeUser((user, done) => {
     done(null, user.userId);
 });
@@ -82,7 +98,7 @@ passport.serializeUser((user, done) => {
 // find session info using session id
 passport.deserializeUser(async (id, done) => {
     try {
-        const user = await User.findOne({ userId: id });
+        const user = await User.findOne({userId: id});
         done(null, user);
     } catch (error) {
         done(error, false);

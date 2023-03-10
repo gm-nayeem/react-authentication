@@ -5,21 +5,21 @@ const userSchema = mongoose.Schema({
         type: String,
         require: true,
     },
-    user_name: {
-        type: String,
-        require: true,
-        unique: true,
-    },
-    email: {
-        type: String,
-        require: true,
-        unique: true,
-    },
-    profilePic: {
+    userName: {
         type: String,
         require: false,
         default: ""
-    }
-});
+    },    
+    email: {
+        type: String,
+        require: false,
+        default: ""
+    },    
+    profilePic: {
+        type: String,
+        require: false,
+        default: "",
+    },
+}, {timestamps: true});
 
 module.exports = mongoose.model("User", userSchema);
